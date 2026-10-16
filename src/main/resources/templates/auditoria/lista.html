@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Auditoria</title>
+</head>
+<body>
+
+<div th:fragment="content">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">
+            <i class="bi bi-journal-text me-2 text-primary"></i>Auditoria
+        </h2>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="ps-4">Usuário</th>
+                        <th>Perfil</th>
+                        <th>Operação</th>
+                        <th>Entidade</th>
+                        <th>Identificador</th>
+                        <th>Campos</th>
+                        <th>Justificativa</th>
+                        <th>Data e hora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(registros)}">
+                        <td colspan="8" class="text-center text-muted py-5">
+                            <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                            Nenhum registro de auditoria.
+                        </td>
+                    </tr>
+                    <tr th:each="registro : ${registros}">
+                        <td class="ps-4" th:text="${registro.usuario}"></td>
+                        <td th:text="${registro.perfil}"></td>
+                        <td th:text="${registro.operacao}"></td>
+                        <td th:text="${registro.entidade}"></td>
+                        <td class="small text-muted" th:text="${registro.entidadeId}"></td>
+                        <td class="small">
+                            <div th:each="campo : ${registro.campos}">
+                                <strong th:text="${campo.campo}"></strong>:
+                                <span th:text="${campo.valorAnterior}"></span>
+                                →
+                                <span th:text="${campo.valorNovo}"></span>
+                            </div>
+                        </td>
+                        <td th:text="${registro.justificativa != null and !registro.justificativa.isEmpty()} ? ${registro.justificativa} : '—'"></td>
+                        <td class="small" th:text="${registro.dataHora != null} ? ${#temporals.format(registro.dataHora, 'dd/MM/yyyy — HH:mm')} : '—'"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

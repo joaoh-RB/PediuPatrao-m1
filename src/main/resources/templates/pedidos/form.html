@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Pedido</title>
+</head>
+<body>
+
+<div th:fragment="content">
+
+    <div class="d-flex align-items-center gap-3 mb-4">
+        <a href="/pedidos" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <h2 class="fw-bold mb-0">Novo Pedido</h2>
+    </div>
+
+    <div class="card shadow-sm" style="max-width: 720px;">
+        <div class="card-body p-4">
+            <form th:action="@{/pedidos/salvar}" th:object="${pedido}" method="post">
+                <div class="mb-3">
+                    <label for="clienteId" class="form-label fw-medium">Cliente</label>
+                    <select id="clienteId" class="form-select" th:field="*{clienteId}" required>
+                        <option value="">Selecione um cliente</option>
+                        <option th:each="cliente : ${clientes}"
+                                th:value="${cliente.id}"
+                                th:text="${cliente.nome}"></option>
+                    </select>
+                </div>
+
+                <p class="fw-medium mb-2">Itens</p>
+                <div id="itens-container">
+                    <div class="row g-2 mb-2 item-row">
+                        <div class="col-8">
+                            <select name="itens[0].produtoId" class="form-select" required>
+                                <option value="">Produto</option>
+                                <option th:each="produto : ${produtos}"
+                                        th:value="${produto.id}"
+                                        th:text="${produto.nome + ' — R$ ' + produto.preco}"></option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <input type="number" name="itens[0].quantidade" class="form-control" min="1" value="1" required/>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-outline-secondary btn-sm mb-4" id="btnAddItem">
+                    <i class="bi bi-plus-lg"></i> Adicionar item
+                </button>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg me-1"></i> Registrar Pedido
+                    </button>
+                    <a href="/pedidos" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        const produtos = /*[[${produtos}]]*/ [];
+        let indice = 1;
+        document.getElementById('btnAddItem').addEventListener('click', function () {
+            const container = document.getElementById('itens-container');
+            const row = document.createElement('div');
+            row.className = 'row g-2 mb-2 item-row';
+            let options = '<option value="">Produto</option>';
+            produtos.forEach(p => {
+                options += `<option value="${p.id}">${p.nome} — R$ ${p.preco}</option>`;
+            });
+            row.innerHTML = `
+                <div class="col-8">
+                    <select name="itens[${indice}].produtoId" class="form-select" required>${options}</select>
+                </div>
+                <div class="col-4">
+                    <input type="number" name="itens[${indice}].quantidade" class="form-control" min="1" value="1" required/>
+                </div>`;
+            container.appendChild(row);
+            indice++;
+        });
+    </script>
+
+</div>
+
+</body>
+</html>
