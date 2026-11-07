@@ -26,3 +26,16 @@ mvnw.cmd spring-boot:run
 - **RF03** — Fluxo RECEBIDO → EM_PREPARACAO → PRONTO → SAIU_PARA_ENTREGA ou RETIRADO → FINALIZADO. Saída registra data/hora e responsável. Transições inválidas bloqueadas. CANCELADO não permite nova alteração de status.
 - **RF04** — Cancelamento e desconto exclusivos do GERENTE (ADMIN não consegue). Cancelamento com justificativa, só antes da saída. Desconto percentual até 20%, só antes da saída.
 - **RF05** — Auditoria persistida no MongoDB (inclusão/status/desconto/cancelamento de pedidos e alteração de clientes). Consulta só para ADMIN e GERENTE. Sem endpoints de alteração/exclusão de auditoria. Senhas não são gravadas nem devolvidas na API de usuários.
+
+## Dashboard administrativo
+
+Página `/dashboard` (perfis `ADMIN` e `GERENTE`), alimentada por `GET /api/dashboard/**`.
+
+Documentação da atividade:
+
+- [Requisitos](docs/dashboard/requisitos.md)
+- [Endpoints](docs/dashboard/api.md)
+- [Testes](docs/dashboard/testes.md)
+- [Roteiro do vídeo](docs/dashboard/roteiro-apresentacao.md)
+
+Na primeira execução, se não houver pedidos, o sistema grava um histórico de demonstração para o painel.
